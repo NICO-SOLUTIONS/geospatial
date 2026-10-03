@@ -217,11 +217,30 @@ export class MapRenderer extends Component {
         const lastUpdate = record.date_localization || new Date().toISOString();
         const unique = lastUpdate.replace(/[^0-9]/g, "");
         const iconUrl = `/web/image?model=${this.resModel}&id=${record.id}&field=${this.fieldMarkerIconImage}&unique=${unique}`;
+        const triangleHeight = 10;
 
-        return L.icon({
-            iconUrl: iconUrl,
-            className: "leaflet_marker_icon",
-            iconSize: [this.markerIconSizeX, this.markerIconSizeY],
+        return L.divIcon({
+            className: "leaflet_marker_wrapper",
+            html: `
+                <div
+                    class="leaflet_marker_icon"
+                    style="
+                        width: ${this.markerIconSizeX}px;
+                        height: ${this.markerIconSizeY}px;
+                        background-image: url('${iconUrl}');
+                    "
+                ></div>
+
+                <div class="leaflet_marker_triangle"></div>
+            `,
+
+            iconSize: [this.markerIconSizeX, this.markerIconSizeY + triangleHeight],
+
+            iconAnchor: [
+                this.markerIconSizeX / 2,
+                this.markerIconSizeY + triangleHeight,
+            ],
+
             popupAnchor: [this.markerPopupAnchorX, this.markerPopupAnchorY],
         });
     }
